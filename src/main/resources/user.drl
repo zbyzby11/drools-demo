@@ -1,0 +1,20 @@
+
+dialect  "mvel"
+
+// 导入所需的类
+import cn.edu.seu.dynamic.service.drools.Triple
+
+rule "rule1"
+    when
+        c1: Triple($X: subject, predicate == "http://www.w3.org/2000/01/rdf-schema#label", $Y : object)
+    then
+        retract(c1)
+end
+
+rule "rule2"
+    when
+        c1: Triple($X: subject, predicate == "http://www.w3.org/2000/01/rdf-schema#subClassOf", $Y : object)
+        c2: Triple(subject == $Y, predicate == "http://www.w3.org/2000/01/rdf-schema#subClassOf", $Z : object)
+    then
+        insert(new Triple($X, "http://www.w3.org/2000/01/rdf-schema#subClassOf", $Z));
+end
